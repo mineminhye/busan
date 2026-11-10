@@ -10,6 +10,7 @@
   /* ===== 영상 설정: 여기만 고치면 됩니다 ===== */
 </style>
 <script>
+  const EMBED = false;   // true로 바꾸면 페이지 안에서 재생 시도
   const CONFIG = {
     video1: { id: "PFXSqRWVxcc", start: 381, end: 540 },   // 06:21 ~ 09:00
     video2: { id: "_mcTI_-Ua4c", start: 545, end: null },  // 09:05 ~ 끝
@@ -127,6 +128,7 @@
   }
 
   function playStep(n) {
+    if (!EMBED) { current = n; onErr({ data: 150 }); return; }
     if (!ready) { setTimeout(() => playStep(n), 300); return; }
     clearInterval(watcher);
     document.getElementById('err').textContent = '';
@@ -168,7 +170,7 @@
     // 150/101: 영상 주인이 다른 사이트 재생을 막아 둔 경우 → 유튜브 새 창으로
     document.getElementById('fbTag').textContent = n === 1 ? '① 배경 영상' : '② 영화 클립';
     document.getElementById('fbText').innerHTML =
-      '이 영상은 유튜브에서만 볼 수 있게 막혀 있어요.<br>' +
+      '유튜브 새 창에서 영상을 봐요.<br>' +
       '<b>' + fmt(v.start) + '</b>부터 시작돼요.' +
       (v.end ? ' <b>' + fmt(v.end) + '</b>에 멈춰 주세요.' : ' 끝까지 보면 돼요.');
     document.getElementById('fbOpen').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s`;
