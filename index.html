@@ -2,187 +2,207 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>흥남부두에서 국제시장까지</title>
+<title>바람 찬 흥남부두에서 부산 꽃분이네까지</title>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<style>
-  /* ===== 영상 설정: 여기만 고치면 됩니다 ===== */
-</style>
 <script>
-  const EMBED = false;   // true로 바꾸면 페이지 안에서 재생 시도
-  const CONFIG = {
-    video1: { id: "PFXSqRWVxcc", start: 381, end: 540 },   // 06:21 ~ 09:00
-    video2: { id: "_mcTI_-Ua4c", start: 545, end: null },  // 09:05 ~ 끝
-    bridge: "이렇게 목숨을 걸고 부산에 도착한 피란민들은<br>어디서, 어떻게 삶을 이어갔을까요?<br><br><b>이제 영화 속 ‘국제시장’으로 가봅니다.</b>"
-  };
+  /* ===== 영상 설정: 여기만 고치면 됩니다 ===== */
+  const V1 = { id: "PFXSqRWVxcc", start: 381, stop: "9분 00초" };   // 흥남철수 배경 영상
+  const V2 = { id: "_mcTI_-Ua4c", start: 545, stop: null };         // 영화 국제시장 요약
 </script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: #000; color: #fff;
-    font-family: 'Jua', 'Malgun Gothic', '맑은 고딕', sans-serif; overflow: hidden; }
-  #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
-  #playerWrap { position: absolute; inset: 0; }
-  #player { width: 100%; height: 100%; }
-  .screen { position: absolute; inset: 0; display: none; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; padding: 4vh 6vw;
-    background: #000; z-index: 5; }
-  .screen.on { display: flex; animation: fade .8s ease; }
-  @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
-  .tag { font-size: 2.2rem; color: #7fb3e6; letter-spacing: .1em; margin-bottom: 2vh; }
-  h1 { font-size: 5.2rem; line-height: 1.25; margin-bottom: 3vh; }
-  .desc { font-size: 2.2rem; color: #c9d6e3; line-height: 1.6; margin-bottom: 5vh; }
-  .bridge { font-size: 3.6rem; line-height: 1.6; color: #f3f3f3; margin-bottom: 6vh; }
-  .bridge b { color: #ffd166; font-weight: normal; }
-  .btn { font-family: inherit; font-size: 2.6rem; padding: 1.6vh 3.2vw; border-radius: 999px;
-    border: 3px solid #ffd166; background: transparent; color: #ffd166; cursor: pointer; transition: .2s; }
-  .btn:hover { background: #ffd166; color: #000; }
-  .steps { display: flex; gap: 2vw; margin-bottom: 5vh; flex-wrap: wrap; justify-content: center; }
-  .step { font-size: 1.9rem; color: #9fb4c8; border: 2px solid #2c3e50; border-radius: 16px; padding: 1.4vh 1.6vw; }
-  .step b { color: #fff; font-weight: normal; }
-  #err { font-size: 2rem; color: #ffb4a2; margin-top: 3vh; line-height: 1.6; }
-  #err a { color: #ffd166; }
-  /* 상단 이동 바 (마우스 올리면 보임) */
-  #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; gap: 10px;
-    justify-content: center; padding: 10px; background: linear-gradient(#000c, #0000);
-    opacity: 0; transition: opacity .3s; }
-  #nav:hover { opacity: 1; }
-  #nav button { font-family: inherit; font-size: 1.3rem; padding: 6px 16px; border-radius: 999px;
-    border: 1px solid #556; background: #111c; color: #ddd; cursor: pointer; }
-  #nav button:hover { border-color: #ffd166; color: #ffd166; }
+  html, body { height: 100%; background: #000; color: #fff; overflow: hidden;
+    font-family: 'Jua', 'Malgun Gothic', '맑은 고딕', sans-serif; }
+  .slide { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 5vh 7vw 12vh; }
+  .slide.on { display: flex; animation: fade .6s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+
+  .tag { font-size: 2.2rem; color: #7fb3e6; margin-bottom: 2.5vh; letter-spacing: .05em; }
+  .stage { display: inline-block; font-size: 2rem; color: #000; background: #7fb3e6;
+    border-radius: 999px; padding: .5vh 1.6vw; margin-bottom: 3vh; }
+  h1 { font-size: 5.4rem; line-height: 1.25; margin-bottom: 4vh; }
+  h2 { font-size: 3.8rem; line-height: 1.35; margin-bottom: 3vh; color: #ffd166; }
+  .q { font-size: 3rem; line-height: 1.6; max-width: 1400px; color: #f1f1f1; }
+  .q b { color: #ffd166; font-weight: normal; }
+  .sub { font-size: 2.1rem; color: #b9c7d6; line-height: 1.6; margin-top: 2vh; }
+  .blank { display: inline-block; min-width: 9em; border-bottom: 4px solid #ffd166; margin: 0 .3em; }
+  .who { font-size: 2.1rem; color: #9fb4c8; margin-top: 3vh; }
+
+  .box { border-radius: 22px; padding: 2.4vh 2.4vw; text-align: left; font-size: 2.4rem; line-height: 1.6; }
+  .tip { background: #2b2410; border: 2px solid #8a6d1f; color: #f5e6bd; max-width: 1300px; margin-bottom: 3vh; }
+  .tip .k { color: #ffd166; }
+  .pair { display: flex; gap: 2vw; max-width: 1400px; margin: 2vh 0 3vh; }
+  .pair .box { flex: 1; background: #0f2236; border: 2px solid #2e5c8a; font-size: 2.2rem; }
+  .pair .box .k { color: #7fb3e6; display: block; margin-bottom: 1vh; }
+  .decl { font-size: 3.4rem; line-height: 1.7; background: #0f2236; border: 3px solid #7fb3e6;
+    border-radius: 24px; padding: 3vh 3vw; margin-top: 2vh; }
+
+  .btn { font-family: inherit; font-size: 2.8rem; padding: 1.8vh 3.4vw; border-radius: 999px;
+    border: 3px solid #ffd166; background: #ffd166; color: #000; cursor: pointer;
+    text-decoration: none; display: inline-block; transition: .2s; }
+  .btn:hover { transform: scale(1.04); }
+  .btn.ghost { background: transparent; color: #ffd166; }
+  .stopnote { font-size: 2.3rem; color: #ffb4a2; margin-top: 3vh; }
+
+  /* 아래 이동 바 */
+  #bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center;
+    justify-content: space-between; padding: 1.6vh 2vw; z-index: 9; }
+  #bar button { font-family: inherit; font-size: 1.8rem; padding: 1vh 1.6vw; border-radius: 999px;
+    border: 2px solid #445; background: #111; color: #ccd; cursor: pointer; }
+  #bar button:hover { border-color: #ffd166; color: #ffd166; }
+  #dots { display: flex; gap: 8px; }
+  #dots i { width: 12px; height: 12px; border-radius: 50%; background: #333; display: block; }
+  #dots i.on { background: #ffd166; }
 </style>
 </head>
 <body>
-<div id="nav">
-  <button onclick="showIntro()">처음</button>
-  <button onclick="playStep(1)">① 흥남철수</button>
-  <button onclick="showBridge()">연결 자막</button>
-  <button onclick="playStep(2)">② 영화 국제시장</button>
-  <button onclick="toggleFull()">전체화면</button>
+
+<!-- 0. 표지 -->
+<section class="slide">
+  <div class="tag">부산의 재발견 · 피란수도 부산과 사람들의 삶</div>
+  <h1>바람 찬 흥남부두에서<br>부산 꽃분이네까지</h1>
+  <button class="btn" onclick="go(1)">시작하기 ▶</button>
+</section>
+
+<!-- 1. 영상1 -->
+<section class="slide">
+  <div class="stage">① 배경 영상</div>
+  <h2>1950년 겨울, 흥남부두에서는<br>무슨 일이 있었을까?</h2>
+  <div class="sub">흥남부두 고립 · 메러디스 빅토리호의 결단 · 크리스마스의 기적</div>
+  <div style="margin-top:5vh"><a class="btn" id="v1" target="_blank" onclick="setTimeout(()=>go(2),400)">▶ 영상 보기</a></div>
+  <div class="stopnote" id="v1note"></div>
+</section>
+
+<!-- 2. 1단계 Q1 -->
+<section class="slide">
+  <div class="stage">1단계 · 사실 확인 (개인)</div>
+  <h2>1. 배에 오른 이유</h2>
+  <div class="q">1950년 12월, 함경도 흥남부두에 고립된 주민들이<br>영하의 강추위 속에서 <b>목숨을 걸고 배에 타야만 했던 이유</b>는 무엇인가요?</div>
+</section>
+
+<!-- 3. 연결 자막 -->
+<section class="slide">
+  <div class="q" style="font-size:3.6rem">이렇게 목숨을 걸고 부산에 도착한 피란민들은<br>어디서, 어떻게 삶을 이어갔을까요?</div>
+  <h2 style="margin-top:5vh">이제 영화 속 ‘국제시장’으로 가봅니다.</h2>
+</section>
+
+<!-- 4. 영상2 -->
+<section class="slide">
+  <div class="stage">② 영화 클립</div>
+  <h2>영화 「국제시장」</h2>
+  <div class="sub">아버지와의 이별 → 1951년 부산 국제시장(꽃분이네) → 천막교실</div>
+  <div style="margin-top:5vh"><a class="btn" id="v2" target="_blank" onclick="setTimeout(()=>go(5),400)">▶ 영상 보기</a></div>
+  <div class="stopnote" id="v2note"></div>
+</section>
+
+<!-- 5. Q2 -->
+<section class="slide">
+  <div class="stage">1단계 · 사실 확인 (개인)</div>
+  <h2>2. 단 하나의 단서</h2>
+  <div class="q">아버지는 아수라장이 된 배 밑바닥에서 덕수의 손을 놓치며<br>마지막으로 <b>부산 어디를 찾아가라고</b> 당부했나요?</div>
+  <div class="q" style="margin-top:4vh">부산 <span class="blank"></span> 시장의 ‘<span class="blank"></span>’</div>
+</section>
+
+<!-- 6. Q3 -->
+<section class="slide">
+  <div class="stage">2단계 · 공간 발견 (개인)</div>
+  <h2>3. 시장에 모인 물건들</h2>
+  <div class="q">영화 속 1951년 국제시장 골목에는 <b>어떤 물건들</b>이 거래되고 있었나요?<br>피란민들에게 이 시장은 <b>어떤 의미의 공간</b>이었을까요?</div>
+</section>
+
+<!-- 7. Q4 -->
+<section class="slide">
+  <div class="stage">2단계 · 공간 발견 (짝 토의)</div>
+  <h2>4. ‘도떼기’에서 ‘국제’로</h2>
+  <div class="box tip"><span class="k">※ 알아두기</span><br>단속을 피해 미군 물자를 뭉텅이로 떼어와 왁자지껄하게 팔던 난전을 흔히 ‘도떼기시장’이라 불렀습니다.</div>
+  <div class="q">이 좁고 혼잡한 난전에 사람들은 왜<br><b>‘국제(國際)’</b>라는 거창한 이름을 붙여주었을까?</div>
+  <div class="who">짝과 이야기한 뒤 이유를 한 줄로 적어 봅시다.</div>
+</section>
+
+<!-- 8. Q5 -->
+<section class="slide">
+  <div class="stage">3단계 · 갈등과 공존 (개인)</div>
+  <h2>5. 그 시절 천막교실의 풍경</h2>
+  <div class="q">부서진 학교 대신 바닷가 자갈밭 위 천막에서<br>가마니를 깔고 공부하던 ‘피란학교’ 장면에서<br><b>가장 인상 깊었던 모습</b>은 무엇인가요?</div>
+</section>
+
+<!-- 9. Q6 -->
+<section class="slide">
+  <div class="stage">3단계 · 갈등과 공존 (모둠 토의)</div>
+  <h2>6. “너 어디서 왔는데?” ― 편견과 이해</h2>
+  <div class="sub" style="margin-top:0">함경도 사투리를 쓰는 덕수에게 부산 학생이 “빨갱이 아니가?”라며 시비를 걸고, 결국 주먹다짐이 벌어집니다.</div>
+  <div class="pair">
+    <div class="box"><span class="k">부산 학생의 입장</span>갑자기 수십만 명의 낯선 피란민이 교실과 동네를 가득 채웠을 때 느꼈을 낯섦과 두려움</div>
+    <div class="box"><span class="k">피란민 덕수의 입장</span>고향과 아버지를 잃고 목숨만 겨우 건져 낯선 말투 속에 내던져진 서러움과 억울함</div>
+  </div>
+  <div class="q" style="font-size:2.6rem">서로 다른 배경을 가진 사람들이 한 공간에 섞일 때 생기는<br><b>오해와 갈등을 어떻게 풀어낼 수 있을까요?</b></div>
+</section>
+
+<!-- 10. Q7 -->
+<section class="slide">
+  <div class="stage">4단계 · 부산의 재발견 (개인)</div>
+  <h2>7. 우리가 배운 부산의 맛, ‘밀면’</h2>
+  <div class="sub" style="margin-top:0;margin-bottom:3vh">밀면은 메밀을 구하기 힘들었던 피란민들이 미군 구호물자인 밀가루로<br>고향의 냉면을 그리워하며 만들어낸 음식입니다.</div>
+  <div class="q">낯선 부산 땅에서 피란민들에게<br><b>‘밀면 한 그릇’</b>은 어떤 위로와 의미였을까요?</div>
+</section>
+
+<!-- 11. Q8 -->
+<section class="slide">
+  <div class="stage">4단계 · 부산의 재발견 (한 줄 선언)</div>
+  <h2>8. 오늘날 우리 교실의 ‘품’</h2>
+  <div class="sub" style="margin-top:0">30만 명이던 부산은 100만 명이 넘는 피란민을 품어 안으며 오늘의 도시로 성장했습니다.</div>
+  <div class="decl">“피란수도 부산이 보여준 품이란,<br><span class="blank" style="min-width:14em"></span> 이다.”</div>
+</section>
+
+<!-- 12. 끝 -->
+<section class="slide">
+  <h1>수고했어요!</h1>
+  <div class="sub">활동지에 쓴 생각을 모둠과 나눠 봅시다.</div>
+</section>
+
+<div id="bar">
+  <button onclick="go(cur-1)">◀ 이전</button>
+  <div id="dots"></div>
+  <div style="display:flex;gap:10px">
+    <button onclick="toggleFull()">전체화면</button>
+    <button onclick="go(cur+1)">다음 ▶</button>
+  </div>
 </div>
 
-<div id="stage">
-  <div id="playerWrap"><div id="player"></div></div>
-
-  <div class="screen on" id="intro">
-    <div class="tag">부산의 재발견 · 피란수도 부산과 사람들의 삶</div>
-    <h1>바람 찬 흥남부두에서<br>부산 꽃분이네까지</h1>
-    <div class="steps">
-      <div class="step"><b>① 배경 영상</b><br>흥남철수와 메러디스 빅토리호</div>
-      <div class="step"><b>② 영화 클립</b><br>국제시장 · 천막교실</div>
-    </div>
-    <button class="btn" onclick="playStep(1)">▶ 시작하기</button>
-    <div id="err"></div>
-  </div>
-
-  <div class="screen" id="bridge">
-    <div class="bridge" id="bridgeText"></div>
-    <button class="btn" onclick="playStep(2)">▶ 영화 보러 가기</button>
-  </div>
-
-  <div class="screen" id="fallback">
-    <div class="tag" id="fbTag"></div>
-    <div class="bridge" id="fbText" style="font-size:2.6rem"></div>
-    <div style="display:flex;gap:2vw;flex-wrap:wrap;justify-content:center">
-      <a class="btn" id="fbOpen" target="_blank" style="text-decoration:none">▶ 유튜브에서 열기</a>
-      <button class="btn" id="fbNext" style="border-color:#7fb3e6;color:#7fb3e6">다 봤어요 → 다음</button>
-    </div>
-  </div>
-
-  <div class="screen" id="end">
-    <div class="tag">영상 끝</div>
-    <h1>활동지를 꺼내 봅시다 ✏️</h1>
-    <div class="desc">1단계부터 차례대로 떠올리며 적어 보세요.</div>
-  </div>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-  let player, current = 0, ready = false, watcher = null;
-  document.getElementById('bridgeText').innerHTML = CONFIG.bridge;
+  const slides = [...document.querySelectorAll('.slide')];
+  let cur = 0;
+  const fmt = s => Math.floor(s/60) + '분 ' + String(s%60).padStart(2,'0') + '초';
+  const url = v => `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s`;
 
-  function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-      width: '100%', height: '100%',
-      playerVars: Object.assign({ rel: 0, modestbranding: 1, playsinline: 1 },
-        location.protocol.startsWith('http') ? { origin: location.origin } : {}),
-      events: {
-        onReady: () => { ready = true; },
-        onStateChange: onState,
-        onError: onErr
-      }
-    });
+  document.getElementById('v1').href = url(V1);
+  document.getElementById('v2').href = url(V2);
+  document.getElementById('v1note').textContent = `${fmt(V1.start)}부터 시작돼요` + (V1.stop ? ` · ${V1.stop}에 멈춰 주세요` : '');
+  document.getElementById('v2note').textContent = `${fmt(V2.start)}부터 시작돼요` + (V2.stop ? ` · ${V2.stop}에 멈춰 주세요` : ' · 끝까지 봐요');
+
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+
+  function go(n) {
+    if (n < 0 || n >= slides.length) return;
+    slides[cur].classList.remove('on');
+    dots.children[cur].classList.remove('on');
+    cur = n;
+    slides[cur].classList.add('on');
+    dots.children[cur].classList.add('on');
   }
-
-  function screen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-    if (id) document.getElementById(id).classList.add('on');
-  }
-
-  function showIntro() { stop(); current = 0; screen('intro'); }
-  function showBridge() { stop(); current = 0; screen('bridge'); }
-
-  function stop() {
-    clearInterval(watcher);
-    if (ready && player.stopVideo) player.stopVideo();
-  }
-
-  function playStep(n) {
-    if (!EMBED) { current = n; onErr({ data: 150 }); return; }
-    if (!ready) { setTimeout(() => playStep(n), 300); return; }
-    clearInterval(watcher);
-    document.getElementById('err').textContent = '';
-    current = n;
-    const v = n === 1 ? CONFIG.video1 : CONFIG.video2;
-    const opt = { videoId: v.id, startSeconds: v.start };
-    if (v.end) opt.endSeconds = v.end;
-    screen(null);
-    player.loadVideoById(opt);
-    // 끝 지점 감시 (endSeconds가 무시되는 경우 대비)
-    if (v.end) watcher = setInterval(() => {
-      if (player.getCurrentTime && player.getCurrentTime() >= v.end) finish();
-    }, 300);
-  }
-
-  function finish() {
-    const n = current;
-    stop();
-    current = 0;
-    if (n === 1) screen('bridge');
-    else if (n === 2) screen('end');
-  }
-
-  function onState(e) {
-    if (e.data === YT.PlayerState.ENDED && current) finish();
-  }
-
-  function fmt(sec){ return Math.floor(sec/60)+'분 '+String(sec%60).padStart(2,'0')+'초'; }
-
-  function onErr(e) {
-    const n = current || 1;
-    const v = n === 2 ? CONFIG.video2 : CONFIG.video1;
-    stop(); current = 0;
-    if (e.data === 153 && location.protocol === 'file:') {
-      screen('intro');
-      document.getElementById('err').innerHTML = '파일을 컴퓨터에서 바로 열면 유튜브가 재생을 막아요.<br>GitHub Pages 주소(https://…)로 열어 주세요.';
-      return;
-    }
-    // 150/101: 영상 주인이 다른 사이트 재생을 막아 둔 경우 → 유튜브 새 창으로
-    document.getElementById('fbTag').textContent = n === 1 ? '① 배경 영상' : '② 영화 클립';
-    document.getElementById('fbText').innerHTML =
-      '유튜브 새 창에서 영상을 봐요.<br>' +
-      '<b>' + fmt(v.start) + '</b>부터 시작돼요.' +
-      (v.end ? ' <b>' + fmt(v.end) + '</b>에 멈춰 주세요.' : ' 끝까지 보면 돼요.');
-    document.getElementById('fbOpen').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s`;
-    document.getElementById('fbNext').onclick = () => screen(n === 1 ? 'bridge' : 'end');
-    screen('fallback');
-  }
-
   function toggleFull() {
     if (!document.fullscreenElement) document.documentElement.requestFullscreen();
     else document.exitFullscreen();
   }
-  document.addEventListener('keydown', e => { if (e.key === 'f') toggleFull(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') go(cur + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+    if (e.key === 'f') toggleFull();
+  });
+  go(0);
 </script>
 </body>
 </html>
