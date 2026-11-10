@@ -79,6 +79,15 @@
     <button class="btn" onclick="playStep(2)">▶ 영화 보러 가기</button>
   </div>
 
+  <div class="screen" id="fallback">
+    <div class="tag" id="fbTag"></div>
+    <div class="bridge" id="fbText" style="font-size:2.6rem"></div>
+    <div style="display:flex;gap:2vw;flex-wrap:wrap;justify-content:center">
+      <a class="btn" id="fbOpen" target="_blank" style="text-decoration:none">▶ 유튜브에서 열기</a>
+      <button class="btn" id="fbNext" style="border-color:#7fb3e6;color:#7fb3e6">다 봤어요 → 다음</button>
+    </div>
+  </div>
+
   <div class="screen" id="end">
     <div class="tag">영상 끝</div>
     <h1>활동지를 꺼내 봅시다 ✏️</h1>
@@ -145,18 +154,26 @@
     if (e.data === YT.PlayerState.ENDED && current) finish();
   }
 
+  function fmt(sec){ return Math.floor(sec/60)+'분 '+String(sec%60).padStart(2,'0')+'초'; }
+
   function onErr(e) {
+    const n = current || 1;
+    const v = n === 2 ? CONFIG.video2 : CONFIG.video1;
+    stop(); current = 0;
     if (e.data === 153 && location.protocol === 'file:') {
-      showIntro();
-      document.getElementById('err').innerHTML = '파일을 컴퓨터에서 바로 열면 유튜브가 재생을 막아요.<br>Netlify에 올린 주소(https://…)로 열어 주세요.';
+      screen('intro');
+      document.getElementById('err').innerHTML = '파일을 컴퓨터에서 바로 열면 유튜브가 재생을 막아요.<br>GitHub Pages 주소(https://…)로 열어 주세요.';
       return;
     }
-    const v = current === 2 ? CONFIG.video2 : CONFIG.video1;
-    const url = `https://youtu.be/${v.id}?t=${v.start}`;
-    showIntro();
-    document.getElementById('err').innerHTML =
-      `이 영상은 여기서 재생할 수 없어요 (오류 ${e.data}).<br>` +
-      `영상 주소를 확인하거나 <a href="${url}" target="_blank">유튜브에서 직접 열기</a>를 눌러 주세요.`;
+    // 150/101: 영상 주인이 다른 사이트 재생을 막아 둔 경우 → 유튜브 새 창으로
+    document.getElementById('fbTag').textContent = n === 1 ? '① 배경 영상' : '② 영화 클립';
+    document.getElementById('fbText').innerHTML =
+      '이 영상은 유튜브에서만 볼 수 있게 막혀 있어요.<br>' +
+      '<b>' + fmt(v.start) + '</b>부터 시작돼요.' +
+      (v.end ? ' <b>' + fmt(v.end) + '</b>에 멈춰 주세요.' : ' 끝까지 보면 돼요.');
+    document.getElementById('fbOpen').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start}s`;
+    document.getElementById('fbNext').onclick = () => screen(n === 1 ? 'bridge' : 'end');
+    screen('fallback');
   }
 
   function toggleFull() {
